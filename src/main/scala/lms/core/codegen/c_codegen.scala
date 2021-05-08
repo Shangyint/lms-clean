@@ -381,6 +381,8 @@ class ExtendedCCodeGen extends CompactCodeGen with ExtendedCodeGen {
   }
 
   override def shallow(n: Node): Unit = n match {
+    case Node(s, "array-offset", Const(mA: Manifest[_])::x::offset::Nil, _) =>
+      es"&($x[$offset])"
     case Node(s, ">>>", List(a, b), _) =>
       emit("(("); emit(remapUnsigned(typeMap.getOrElse(s, manifest[Unknown]))); emit(") ")
       shallowP(a, precedence("cast") + 1); emit(") >> "); shallowP(b, precedence(">>") + 1)

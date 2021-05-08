@@ -77,6 +77,7 @@ trait ArrayOps extends PrimitiveOps {
     def length: Rep[Int] = Wrap[Int](Adapter.g.reflect("array_length", Unwrap(x)))
     def slice(s: Rep[Int], e: Rep[Int]): Rep[Array[A]] = EffectView[Array[A]](Wrap[Array[A]](Adapter.g.reflect("array_slice", Unwrap(x), Unwrap(s), Unwrap(e))), x) // (Unwrap(x), Adapter.STORE)())
     def free: Unit = Adapter.g.reflectFree("array_free", Unwrap(x))(Unwrap(x))
+    def +(offset: Rep[Int]): Rep[Array[A]] = Wrap[Array[A]](Adapter.g.reflect("array-offset", Backend.Const(manifest[A]), Unwrap(x), Unwrap(offset)))
     def copyToArray(arr: Rep[Array[A]], start: Rep[Int], len: Rep[Int]) = Adapter.g.reflectEffect("array_copyTo", Unwrap(x), Unwrap(arr), Unwrap(start), Unwrap(len))(Unwrap(x))(Unwrap(arr))
     def copyToLongArray(arr: Rep[LongArray[A]], start: Rep[Long], len: Rep[Int]) = Adapter.g.reflectEffect("array_copyTo", Unwrap(x), Unwrap(arr), Unwrap(start), Unwrap(len))(Unwrap(x))(Unwrap(arr))
     // FIXME: currently copy!!
